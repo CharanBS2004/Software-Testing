@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form</title>
+    <style>
+        /* Base styles that apply to both themes */
+        :root {
+            --primary-color: #4285f4;
+            --error-color: #ff4444;
+            --success-color: #00C851;
+            --border-radius: 5px;
+            --transition: all 0.3s ease;
+        }
+
+        /* Light theme variables */
+        .light-mode {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --form-bg: #ffffff;
+            --input-bg: #f9f9f9;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark theme variables */
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #f5f5f5;
+            --form-bg: #1e1e1e;
+            --input-bg: #2d2d2d;
+            --border-color: #444;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.9;
+        }
+
+        .registration-form {
+            background-color: var(--form-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: var(--transition);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .radio-option input {
+            width: auto;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .success-message {
+            color: var(--success-color);
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="container">
+        <header>
+            <h1>User Registration</h1>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> Dark Mode
+            </button>
+        </header>
+
+        <form class="registration-form" id="registrationForm">
+            <div class="form-grid">
+                <!-- Name Section -->
+                <div class="form-group">
+                    <label for="firstName">First Name*</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <div class="error-message" id="firstNameError">First name is required</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="middleName">Middle Name</label>
+                    <input type="text" id="middleName" name="middleName">
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name*</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <div class="error-message" id="lastNameError">Last name is required</div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="form-group">
+                    <label for="email">Email*</label>
+                    <input type="email" id="email" name="email" required>
+                    <!-- Intentional error: This regex is incomplete (missing . before domain) -->
+                    <div class="error-message" id="emailError">Please enter a valid email (e.g., user@example.com)</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number*</label>
+                    <input type="tel" id="phone" name="phone" required>
+                    <!-- Intentional error: This pattern is too restrictive (no spaces/dashes allowed) -->
+                    <div class="error-message" id="phoneError">Please enter a 10-digit phone number (no spaces or dashes)</div>
+                </div>
+
+                <!-- Account Info -->
+                <div class="form-group">
+                    <label for="username">Username*</label>
+                    <input type="text" id="username" name="username" required>
+                    <!-- Intentional error: This regex is too permissive (allows spaces) -->
+                    <div class="error-message" id="usernameError">Username must be 4-20 characters (spaces allowed)</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password*</label>
+                    <input type="password" id="password" name="password" required>
+                    <!-- Intentional error: This regex doesn't enforce special characters -->
+                    <div class="error-message" id="passwordError">Password must be 8+ chars with 1 number</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password*</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                </div>
+
+                <!-- Personal Info -->
+                <div class="form-group">
+                    <label for="dob">Date of Birth*</label>
+                    <input type="date" id="dob" name="dob" required>
+                    <div class="error-message" id="dobError">You must be at least 13 years old</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender*</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="male" name="gender" value="male" required>
+                            <label for="male">Male</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female">Female</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="other" name="gender" value="other">
+                            <label for="other">Other</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="genderError">Please select a gender</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country*</label>
+                    <select id="country" name="country" required>
+                        <option value="">Select a country</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                        <option value="IN">India</option>
+                        <option value="JP">Japan</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="BR">Brazil</option>
+                        <option value="OT">Other</option>
+                    </select>
+                    <div class="error-message" id="countryError">Please select a country</div>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="form-group full-width">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" rows="4" maxlength="500"></textarea>
+                    <div class="error-message" id="bioError">Bio cannot exceed 500 characters</div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn" disabled>Register</button>
+            <div class="success-message" id="successMessage">
+                Registration successful! Welcome aboard.
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+        const form = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+
+        // Form fields
+        const formFields = {
+            firstName: document.getElementById('firstName'),
+            lastName: document.getElementById('lastName'),
+            email: document.getElementById('email'),
+            phone: document.getElementById('phone'),
+            username: document.getElementById('username'),
+            password: document.getElementById('password'),
+            confirmPassword: document.getElementById('confirmPassword'),
+            dob: document.getElementById('dob'),
+            gender: document.querySelectorAll('input[name="gender"]'),
+            country: document.getElementById('country'),
+            bio: document.getElementById('bio')
+        };
+
+        // Error elements
+        const errorElements = {
+            firstName: document.getElementById('firstNameError'),
+            lastName: document.getElementById('lastNameError'),
+            email: document.getElementById('emailError'),
+            phone: document.getElementById('phoneError'),
+            username: document.getElementById('usernameError'),
+            password: document.getElementById('passwordError'),
+            confirmPassword: document.getElementById('confirmPasswordError'),
+            dob: document.getElementById('dobError'),
+            gender: document.getElementById('genderError'),
+            country: document.getElementById('countryError'),
+            bio: document.getElementById('bioError')
+        };
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            body.classList.toggle('dark-mode');
+            
+            const isDarkMode = body.classList.contains('dark-mode');
+            themeIcon.textContent = isDarkMode ? '☀️' : '🌙';
+            themeToggle.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
+            
+            // Store preference in localStorage
+            localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
+        });
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('themePreference');
+        if (savedTheme === 'dark') {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeToggle.textContent = 'Light Mode';
+        }
+
+        // Validation Patterns (with intentional errors)
+        const validationPatterns = {
+            email: /^[^@]+@[^@]+\.[^@]+$/,  // Intentional error: Missing proper domain validation
+            phone: /^\d{10}$/,             // Intentional error: Too restrictive
+            username: /^[a-zA-Z0-9 ]{4,20}$/, // Intentional error: Allows spaces
+            password: /^(?=.*\d).{8,}$/,  // Intentional error: No special char requirement
+            bio: /^[\s\S]{0,500}$/
+        };
+
+        // Field Validation Functions
+        function validateField(fieldName, value) {
+            switch (fieldName) {
+                case 'firstName':
+                case 'lastName':
+                    return value.trim().length > 0;
+                
+                case 'email':
+                    return validationPatterns.email.test(value);
+                
+                case 'phone':
+                    return validationPatterns.phone.test(value);
+                
+                case 'username':
+                    return validationPatterns.username.test(value);
+                
+                case 'password':
+                    return validationPatterns.password.test(value);
+                
+                case 'confirmPassword':
+                    return value === formFields.password.value;
+                
+                case 'dob':
+                    if (!value) return false;
+                    const dob = new Date(value);
+                    const today = new Date();
+                    const minAgeDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+                    return dob <= minAgeDate;
+                
+                case 'gender':
+                    return Array.from(formFields.gender).some(radio => radio.checked);
+                
+                case 'country':
+                    return value !== '';
+                
+                case 'bio':
+                    return validationPatterns.bio.test(value);
+                
+                default:
+                    return true;
+            }
+        }
+
+        // Show/hide error message
+        function toggleError(fieldName, isValid) {
+            if (errorElements[fieldName]) {
+                errorElements[fieldName].style.display = isValid ? 'none' : 'block';
+            }
+        }
+
+        // Validate all fields and update submit button
+        function validateForm() {
+            let isFormValid = true;
+            
+            // Validate all required fields
+            for (const [fieldName, field] of Object.entries(formFields)) {
+                // Skip middle name as it's optional
+                if (fieldName === 'middleName') continue;
+                
+                let value;
+                if (fieldName === 'gender') {
+                    value = Array.from(field).some(radio => radio.checked);
+                } else {
+                    value = field.value;
+                }
+                
+                const isValid = validateField(fieldName, value);
+                toggleError(fieldName, isValid);
+                
+                if (!isValid) {
+                    isFormValid = false;
+                }
+            }
+            
+            submitBtn.disabled = !isFormValid;
+            return isFormValid;
+        }
+
+        // Add event listeners for real-time validation
+        formFields.firstName.addEventListener('input', () => {
+            const isValid = validateField('firstName', formFields.firstName.value);
+            toggleError('firstName', isValid);
+            validateForm();
+        });
+
+        formFields.lastName.addEventListener('input', () => {
+            const isValid = validateField('lastName', formFields.lastName.value);
+            toggleError('lastName', isValid);
+            validateForm();
+        });
+
+        formFields.email.addEventListener('input', () => {
+            const isValid = validateField('email', formFields.email.value);
+            toggleError('email', isValid);
+            validateForm();
+        });
+
+        formFields.phone.addEventListener('input', () => {
+            const isValid = validateField('phone', formFields.phone.value);
+            toggleError('phone', isValid);
+            validateForm();
+        });
+
+        formFields.username.addEventListener('input', () => {
+            const isValid = validateField('username', formFields.username.value);
+            toggleError('username', isValid);
+            validateForm();
+        });
+
+        formFields.password.addEventListener('input', () => {
+            const isValid = validateField('password', formFields.password.value);
+            toggleError('password', isValid);
+            
+            // Also validate confirm password when password changes
+            if (formFields.confirmPassword.value) {
+                const isConfirmValid = validateField('confirmPassword', formFields.confirmPassword.value);
+                toggleError('confirmPassword', isConfirmValid);
+            }
+            
+            validateForm();
+        });
+
+        formFields.confirmPassword.addEventListener('input', () => {
+            const isValid = validateField('confirmPassword', formFields.confirmPassword.value);
+            toggleError('confirmPassword', isValid);
+            validateForm();
+        });
+
+        formFields.dob.addEventListener('change', () => {
+            const isValid = validateField('dob', formFields.dob.value);
+            toggleError('dob', isValid);
+            validateForm();
+        });
+
+        Array.from(formFields.gender).forEach(radio => {
+            radio.addEventListener('change', () => {
+                const isValid = validateField('gender', true);
+                toggleError('gender', isValid);
+                validateForm();
+            });
+        });
+
+        formFields.country.addEventListener('change', () => {
+            const isValid = validateField('country', formFields.country.value);
+            toggleError('country', isValid);
+            validateForm();
+        });
+
+        formFields.bio.addEventListener('input', () => {
+            const isValid = validateField('bio', formFields.bio.value);
+            toggleError('bio', isValid);
+            validateForm();
+        });
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (validateForm()) {
+                // Simulate form submission
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Processing...';
+                
+                setTimeout(() => {
+                    successMessage.style.display = 'block';
+                    form.reset();
+                    submitBtn.textContent = 'Register';
+                    
+                    // Reset form state after submission
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                        validateForm(); // This will disable the button again since form is empty
+                    }, 3000);
+                }, 1500);
+            }
+        });
+
+        // Initial validation to disable button
+        validateForm();
+    </script>
+</body>
+</html>
